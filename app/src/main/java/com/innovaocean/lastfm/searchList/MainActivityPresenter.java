@@ -16,7 +16,7 @@ public class MainActivityPresenter {
     private Scheduler uiScheduler;
     private Scheduler ioScheduler;
 
-    MainActivityPresenter(View view, LastfmRepository repository, Scheduler ioScheduler, Scheduler uiScheduler) {
+    public MainActivityPresenter(View view, LastfmRepository repository, Scheduler ioScheduler, Scheduler uiScheduler) {
         this.view = view;
         this.repository = repository;
         this.disposables = new CompositeDisposable();
@@ -24,7 +24,7 @@ public class MainActivityPresenter {
         this.uiScheduler = uiScheduler;
     }
 
-    void start(String searchText) {
+    public void start(String searchText) {
         loadAlbums(searchText);
     }
 
@@ -32,7 +32,7 @@ public class MainActivityPresenter {
         disposables.dispose();
     }
 
-    void albumClicked(Album album) {
+    public void albumClicked(Album album) {
         view.displayAlbumDetail(album);
     }
 
@@ -41,18 +41,22 @@ public class MainActivityPresenter {
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe(albums -> {
-                if (albums.size() > 0) {
-                    view.showAlbums(albums);
-                } else {
-                    view.showError();
-                }
+                onSuccess(albums);
             }, throwable -> {
                 throwable.printStackTrace();
                 view.showError();
             });
     }
 
-    interface View {
+    private void onSuccess(List<Album> albums) {
+        if (albums.size() > 0) {
+            view.showAlbums(albums);
+        } else {
+            view.showError();
+        }
+    }
+
+    public interface View {
 
         void showAlbums(List<Album> albums);
 
