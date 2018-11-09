@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Lastfm</string>
+    <string name="couldnt_find_album">Couldn\'t find any album</string>
+    <string name="search_album">Search Album</string>
 </resources>
